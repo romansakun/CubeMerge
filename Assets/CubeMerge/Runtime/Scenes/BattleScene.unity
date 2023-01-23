@@ -226,6 +226,14 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3463443467914898996, guid: 3692aea4e435a164bb1c995dd78a8379, type: 3}
+      propertyPath: _tilePositionOffset.x
+      value: -3.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3463443467914898996, guid: 3692aea4e435a164bb1c995dd78a8379, type: 3}
+      propertyPath: _tilePositionOffset.y
+      value: -3.75
+      objectReference: {fileID: 0}
     - target: {fileID: 5403964318812783963, guid: 3692aea4e435a164bb1c995dd78a8379, type: 3}
       propertyPath: m_RootOrder
       value: 1

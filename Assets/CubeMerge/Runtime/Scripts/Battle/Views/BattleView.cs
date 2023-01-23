@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class BattleView : MonoBehaviour
@@ -18,12 +17,17 @@ public class BattleView : MonoBehaviour
         {
             for (int j = 0; j < 8; j++)
             {
-                if (i % 2 != 0 || j % 2 != 0)
-                    Instantiate(_darkSquare, new Vector3(i + _tilePositionOffset.x, 0.1f, j + _tilePositionOffset.y), _darkSquare.rotation, transform);
+                if (j % 2 == 0)
+                    InstantiateTile(i % 2 == 0 ? _darkSquare : _lightSquare, i, j);
                 else
-                    Instantiate(_lightSquare, new Vector3(i + _tilePositionOffset.x, 0.1f, j + _tilePositionOffset.y), _lightSquare.rotation, transform);
+                    InstantiateTile(i % 2 != 0 ? _darkSquare : _lightSquare, i, j);
             }
         }
     }
 
+    private void InstantiateTile(Transform tile, int i, int j)
+    {
+        var pos = new Vector3(i + _tilePositionOffset.x, 0.1f, j + _tilePositionOffset.y);
+        Instantiate(tile, pos, tile.rotation, transform);
+    }
 }
