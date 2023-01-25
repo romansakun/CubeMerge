@@ -1,7 +1,7 @@
-using MVVM.Runtime.ReactiveProperties;
-using UnityEngine;
 using System;
 using System.Collections.Generic;
+using UnityEngine;
+using MVVM.Runtime.ReactiveProperties;
 
 namespace MVVM.Runtime
 {
@@ -11,7 +11,6 @@ namespace MVVM.Runtime
         
         protected T _viewModel;
 
-        
         public abstract void Init(T viewModel);
 
         protected void UpdateViewModel(T viewModel)
@@ -19,13 +18,7 @@ namespace MVVM.Runtime
             if (viewModel == null)
                 throw new Exception($"In '{GetType().Name}' -is view type, '{gameObject.name}' -is name of gameObject : view model is missing!");
 
-            if (_viewModel != null)
-            {
-                foreach (var removeListener in _listenerRemovingActions)
-                    removeListener();
-                
-                _listenerRemovingActions.Clear();
-            }
+            RemoveAllListeners();
 
             _viewModel = viewModel;
         }
@@ -42,8 +35,6 @@ namespace MVVM.Runtime
             {
                 if (this)
                     listener();
-                else
-                    reactiveProperty.RemoveListener(listener);
             });
             reactiveProperty.AddListener(wrapListenerInvoking);
             
@@ -55,6 +46,20 @@ namespace MVVM.Runtime
 
             if (invokeImmediately)
                 listener();
+        }
+
+        private void RemoveAllListeners()
+        {
+            if (_viewModel == null)
+                return;
+            
+            _listenerRemovingActions.ForEach((removeListener) => removeListener());
+            _listenerRemovingActions.Clear();
+        }
+
+        private void OnDestroy()
+        {
+            RemoveAllListeners();
         }
     }
 }
