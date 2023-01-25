@@ -1,4 +1,6 @@
-public interface IViewModel
+using System;
+
+public interface IViewModel : IDisposable
 {
 
 }

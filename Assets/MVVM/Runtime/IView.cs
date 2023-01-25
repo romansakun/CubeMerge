@@ -1,7 +1,7 @@
 namespace MVVM.Runtime
 {
-    public interface IView
+    public interface IView<T> where T : IViewModel
     {
-        void Init(IViewModel viewModel);
+        void Init(T viewModel);
     }
 }

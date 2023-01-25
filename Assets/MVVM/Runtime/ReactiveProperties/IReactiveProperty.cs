@@ -2,7 +2,7 @@ using System;
 
 namespace MVVM.Runtime.ReactiveProperties
 {
-    public interface IReactiveProperty<T>
+    public interface IReactiveProperty<out T>
     {
         T Value { get; }
         

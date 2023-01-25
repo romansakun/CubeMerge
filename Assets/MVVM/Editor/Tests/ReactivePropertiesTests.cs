@@ -46,7 +46,6 @@ public class ReactivePropertyTests
     {
         ReactiveProperty<object> reactiveProperty = new ReactiveProperty<object>();
         IReactiveProperty<object> propertyInterface = reactiveProperty;
-
         int listenerInvokeCount = 0;
         void TestListenerAction() => listenerInvokeCount++;
         propertyInterface.AddListener(TestListenerAction);
