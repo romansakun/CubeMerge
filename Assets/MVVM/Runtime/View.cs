@@ -18,7 +18,7 @@ namespace MVVM.Runtime
             if (viewModel == null)
                 throw new Exception($"In '{GetType().Name}' -is view type, '{gameObject.name}' -is name of gameObject : view model is missing!");
 
-            RemoveAllListeners();
+            RemoveAllViewModelListeners();
 
             _viewModel = viewModel;
         }
@@ -31,24 +31,15 @@ namespace MVVM.Runtime
             if (reactiveProperty == null)
                 throw new Exception($"In '{_viewModel.GetType().Name}' - is ViewModel : reactive property is missing!");
 
-            var wrapListenerInvoking = new Action(() =>
-            {
-                if (this)
-                    listener();
-            });
-            reactiveProperty.AddListener(wrapListenerInvoking);
-            
-            var wrapListenerRemoving =  new Action(() =>
-            {
-                reactiveProperty.RemoveListener(wrapListenerInvoking);
-            });
-            _listenerRemovingActions.Add(wrapListenerRemoving);
-
             if (invokeImmediately)
                 listener();
+            
+            reactiveProperty.AddListener(listener);
+
+            _listenerRemovingActions.Add(() => reactiveProperty.RemoveListener(listener));
         }
 
-        private void RemoveAllListeners()
+        private void RemoveAllViewModelListeners()
         {
             if (_viewModel == null)
                 return;
@@ -59,7 +50,7 @@ namespace MVVM.Runtime
 
         private void OnDestroy()
         {
-            RemoveAllListeners();
+            RemoveAllViewModelListeners();
         }
     }
 }

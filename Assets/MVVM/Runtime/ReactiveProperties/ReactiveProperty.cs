@@ -25,7 +25,7 @@ namespace MVVM.Runtime.ReactiveProperties
                     return;
                 
                 _value = value;
-                InvokeChanging();
+                OnChange();
             }
         }
 
@@ -44,7 +44,13 @@ namespace MVVM.Runtime.ReactiveProperties
             _value = fromOther._value;
         }
 
-        public void InvokeChanging()
+        public void DoAction(Action<T> action)
+        {
+            action(_value);
+            OnChange();
+        }
+        
+        private void OnChange()
         {
             if (_isDisposed)
                 return;

@@ -9,7 +9,7 @@ public class ViewTests
 {
     private class TestViewModel : IViewModel
     {
-        private readonly ReactiveProperty<int> _intProperty;
+        private ReactiveProperty<int> _intProperty;
         public IReactiveProperty<int> IntProperty => _intProperty;
 
         public TestViewModel() => _intProperty = new ReactiveProperty<int>(5);
@@ -54,7 +54,6 @@ public class ViewTests
     [UnityTest]
     public IEnumerator WhenTwoViewModelWasInit_AndIncrementIntPropertyOnce_ThenListenerInvokedTwoTimes()
     {
-        //todo split test..
         var testViewModelOne = new TestViewModel();
         var testViewModelTwo = new TestViewModel();
         var testView = new GameObject().AddComponent<TestView>();
@@ -65,5 +64,36 @@ public class ViewTests
         yield return null;
         
         Assert.AreEqual(2, testView.ListenerInvokedCount);
+    }
+    
+    [UnityTest]
+    public IEnumerator WhenViewDestroyed_AndIncrementIntPropertyOnce_ThenListenerInvokedOneTime()
+    {
+        var testViewModel = new TestViewModel();
+        var testView = new GameObject().AddComponent<TestView>();
+        
+        testView.Init(testViewModel);
+        Object.Destroy(testView.gameObject);
+        yield return null;
+        testViewModel.IncrementIntProperty();
+
+        // testView is still not null and we can check ListenerInvokedCount
+        Assert.AreEqual(1, testView.ListenerInvokedCount);
+    }
+    
+    [UnityTest]
+    public IEnumerator WhenTwoViews_AndIncrementIntPropertyOnce_ThenListenerInvokedTwoTimes()
+    {
+        var testViewModel = new TestViewModel();
+        var testViewOne = new GameObject().AddComponent<TestView>();
+        var testViewTwo = new GameObject().AddComponent<TestView>();
+        testViewOne.Init(testViewModel);
+        testViewTwo.Init(testViewModel);
+        
+        yield return null;
+        testViewModel.IncrementIntProperty();
+
+        Assert.AreEqual(2, testViewOne.ListenerInvokedCount);
+        Assert.AreEqual(2, testViewTwo.ListenerInvokedCount);
     }
 }

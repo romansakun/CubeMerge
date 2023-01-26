@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using MVVM.Runtime.ReactiveProperties;
 using NUnit.Framework;
 using UnityEngine;
@@ -55,5 +56,39 @@ public class ReactivePropertyTests
         reactiveProperty.Value = "second new value";
         
         Assert.AreEqual(0, listenerInvokeCount);
+    }    
+    
+    [Test]
+    public void WhenDispose_ThenListenerNotInvoked()
+    {
+        ReactiveProperty<object> reactiveProperty = new ReactiveProperty<object>();
+        IReactiveProperty<object> propertyInterface = reactiveProperty;
+        int listenerInvokeCount = 0;
+        void TestListenerAction() => listenerInvokeCount++;
+        propertyInterface.AddListener(TestListenerAction);
+        reactiveProperty.Dispose();
+
+        reactiveProperty.Value = "first new value";
+        reactiveProperty.Value = "second new value";
+        
+        Assert.AreEqual(0, listenerInvokeCount);
+    }
+    
+    [Test]
+    public void WhenDoAction_ThenListenerWasInvoked()
+    {
+        ReactiveProperty<Dictionary<int, int>> reactiveProperty = 
+            new ReactiveProperty<Dictionary<int, int>>(new Dictionary<int, int>()
+            {
+                {0, 0}, {1, 1}
+            });
+        IReactiveProperty<Dictionary<int, int>> propertyInterface = reactiveProperty;
+        int listenerInvokeCount = 0;
+        void TestListenerAction() => listenerInvokeCount++;
+        propertyInterface.AddListener(TestListenerAction);
+        
+        reactiveProperty.DoAction(dict => dict[0] = 5);
+        
+        Assert.AreEqual(1, listenerInvokeCount);
     }
 }
