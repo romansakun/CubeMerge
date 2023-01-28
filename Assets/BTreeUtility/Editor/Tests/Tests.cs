@@ -3,7 +3,6 @@ using BTreeUtility;
 using BTreeUtility.Nodes;
 using NUnit.Framework;
 using Sample;
-using UnityEditor.VersionControl;
 
 public class Tests
 {
@@ -57,9 +56,31 @@ public class Tests
         var errorMessage = Assert.Catch(()=>_factory.CreateNodes()).Message;
         StringAssert.Contains("Nodes in your map dont contains", errorMessage);
     }
-    
+
     [Test]
-    public void WhenNotQualifierAfterSelector_ThenFirstNodeMustBeSelectorException ()
+    public void WhenConnectionKeyEqualsValue_ThenCircularConnectionException()
+    {
+        _map.SetNodes(new List<int>() {1});
+        _map.SetConnections(new Dictionary<int, int>() {{1, 1}});
+        _factory.CreatingFunc = nodeId => new FirstScoreSelector();
+
+        var errorMessage = Assert.Catch(() => _factory.CreateNodes()).Message;
+        StringAssert.Contains("Circular connection", errorMessage);
+    }
+
+    [Test]
+    public void WhenConnectionHasInfiniteLoop_ThenCircularConnectionException()
+    {
+        _map.SetNodes(new List<int>() {1, 2, 3});
+        _map.SetConnections(new Dictionary<int, int>() {{1, 2}, {2, 3}, {3, 2}});
+        _factory.CreatingFunc = nodeId => nodeId == 1 ? new FirstScoreSelector() : new SampleAction();
+
+        var errorMessage = Assert.Catch(() => _factory.CreateNodes()).Message;
+        StringAssert.Contains("Circular connection", errorMessage);
+    }
+
+    [Test]
+    public void WhenActionExecuted ()
     {
         _map.SetNodes(new List<int>() {1, 2});
         _map.SetConnections(new Dictionary<int, int>(){{1, 2}});
@@ -77,15 +98,31 @@ public class Tests
         
         Assert.AreEqual(5, _context.Number);    
     }
-
+    
+    //todo test extensions for AllScorers
     [Test]
-    public void WhenConnectionHasInfiniteLoop_ThenCircularConnectionException()
+    public void WhenActionWithOptionsExecuted ()
     {
-        _map.SetNodes(new List<int>() {1});
-        _map.SetConnections(new Dictionary<int, int>() {{1, 1}});
-        _factory.CreatingFunc = nodeId => new FirstScoreSelector();
-
-        var errorMessage = Assert.Catch(() => _factory.CreateNodes()).Message;
-        StringAssert.Contains("Circular connection", errorMessage);
+        _map.SetNodes(new List<int>() {1, 2});
+        _map.SetConnections(new Dictionary<int, int>(){{1, 2}});
+        var options = new List<IOptionScorer<SampleContext, string>>()
+        {
+            new SampleOption() {ScoreFunc = str => str.Contains("lol") ? 10 : 1},
+            new SampleOption() {ScoreFunc = str => str.Contains("kek") ? 5 : 10}
+        };
+        var actionWithOption = new SampleActionWithOptions(options) {
+            stringsToEvaluate = new List<string>() {
+                "lol!", "!kek", "ololo kek", "alala"
+            }
+        };
+        _factory.CreatingFunc = id => id == 1 ? new FirstScoreSelector() : actionWithOption;
+        var nodes = _factory.CreateNodes();
+        var client = new BTClient(nodes.GetRootSelector(), _context);
+        client.Execute();
+        
+        
+        //Assert.AreEqual("lol!", _context.AllScorers);    
+        Assert.AreEqual("lol!", _context.Best);    
+        Assert.AreEqual("!kek", _context.Worst);    
     }
 }

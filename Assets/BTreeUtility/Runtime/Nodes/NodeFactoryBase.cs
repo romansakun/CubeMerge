@@ -64,24 +64,31 @@ namespace BTreeUtility.Nodes
             
             return nodes;
         }
-        
+
         private void ConnectNodes(Dictionary<int, INode> allNodes)
         {
-            //todo check Circular connections
-            
             var connections = _nodeMap.Connections;
             if (connections == null || connections.Count == 0)
                 throw new Exception($"Connections missing!\nCheck your Map:\n{_nodeMap.GetType().FullName}");
-            
-            foreach (var connection in connections)
+
+            foreach (var pair in connections)
             {
-                if (connection.Key == connection.Value)
-                    throw new Exception($"Circular connection!\nCheck your Map:\n{_nodeMap.GetType().FullName}");
+                var sourceKey = pair.Key;
+                var currentKey = pair.Value;
+                var attemptCount = allNodes.Count;
+                while (connections.ContainsKey(currentKey) && attemptCount > 0)
+                {
+                    if (currentKey == sourceKey)
+                        throw new Exception($"Circular connection!\nCheck your Map:\n{_nodeMap.GetType().FullName}");
+                    
+                    currentKey = connections[currentKey];
+                    attemptCount--;
+                }
                 
-                if (!allNodes.ContainsKey(connection.Value))
-                    throw new Exception($"Nodes in your map dont contains : [{connection.Value}]!");
+                if (!allNodes.ContainsKey(pair.Value))
+                    throw new Exception($"Nodes in your map dont contains : [{pair.Value}]!\nCheck your Map:\n{_nodeMap.GetType().FullName}");
                 
-                allNodes[connection.Key].Next = allNodes[connection.Value];
+                allNodes[pair.Key].Next = allNodes[pair.Value];
             }
         }
 

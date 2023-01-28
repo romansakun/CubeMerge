@@ -8,10 +8,12 @@ namespace Sample
     public class SampleContext : IBTContext
     {
         public float DeltaTime { get; set; }
-        
-        public string Message;
+
+        public Dictionary<string, float> AllScorers;
+        public string Best;
+        public string Worst;
+
         public float Number;
-        public int Count;
     }
     
     public class SampleQualifier : QualifierBase<SampleContext>
@@ -36,11 +38,11 @@ namespace Sample
 
     public class SampleOption : IOptionScorer<SampleContext, string>
     {
-        public Func<SampleContext, float> ScoreFunc = context => 0;
+        public Func<string, float> ScoreFunc = context => 0;
         
         public float Score(SampleContext context, string option)
         {
-            return ScoreFunc(context);
+            return ScoreFunc(option);
         }
     }
 
@@ -54,7 +56,9 @@ namespace Sample
 
         protected override void Execute(SampleContext context)
         {
-            //GetBest(context, stringsToEvaluate);
+            context.AllScorers = GetAllScores(context, stringsToEvaluate);
+            context.Best = GetBest(context, stringsToEvaluate);
+            context.Worst = GetWorst(context, stringsToEvaluate);
         }
     }
     
