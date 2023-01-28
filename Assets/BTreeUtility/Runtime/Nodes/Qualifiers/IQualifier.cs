@@ -2,6 +2,6 @@
 {
     public interface IQualifier: INode
     {
-        float Score(IAIContext context);
+        float Score(IBTContext context);
     }
 }

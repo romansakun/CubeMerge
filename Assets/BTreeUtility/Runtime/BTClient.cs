@@ -7,15 +7,16 @@ using UnityEngine;
 
 namespace BTreeUtility
 {
-    public class ClientComponent
+    //todo dont use UnityTime - replace it to BTCLientComponent
+    public class BTClient
     {
         private readonly ISelector _rootSelector;
-        private readonly IAIContext _context;
+        private readonly IBTContext _context;
         private readonly List<INode> _nodeChain;
 
         private float _executionLastCallTime;
 
-        public ClientComponent(ISelector rootSelector, IAIContext context)
+        public BTClient(ISelector rootSelector, IBTContext context)
         {
             _rootSelector = rootSelector ?? throw new ArgumentException($"{nameof(rootSelector)} is null!");
             _context = context ?? throw new ArgumentException($"{nameof(context)} is null!");

@@ -1,22 +1,20 @@
 {
-    "name": "BTreeUtility.Runtime.Tests",
+    "name": "BTreeUtility.Editor.Tests",
     "rootNamespace": "",
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
-        "ShittyUtilityAI.Runtime"
+        "BTreeUtility.Runtime",
+        "BTreeUtility.Editor"
     ],
     "includePlatforms": [
-        "Editor",
-        "macOSStandalone",
-        "WindowsStandalone64"
+        "Editor"
     ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": true,
     "precompiledReferences": [
-        "nunit.framework.dll",
-        "NSubstitute.dll"
+        "nunit.framework.dll"
     ],
     "autoReferenced": false,
     "defineConstraints": [

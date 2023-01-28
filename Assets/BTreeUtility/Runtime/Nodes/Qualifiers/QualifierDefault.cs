@@ -11,7 +11,7 @@
             _score = score;
         }
 
-        public float Score(IAIContext context)
+        public float Score(IBTContext context)
         {
             return _score;
         }

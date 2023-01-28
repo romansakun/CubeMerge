@@ -2,6 +2,6 @@
 {
     public interface IAction : INode
     {
-        void Execute(IAIContext context);
+        void Execute(IBTContext context);
     }
 }

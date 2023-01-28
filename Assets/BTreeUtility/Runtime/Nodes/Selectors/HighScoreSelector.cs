@@ -9,7 +9,7 @@ namespace BTreeUtility.Nodes
         public List<IQualifier> Qualifiers { get; } = new List<IQualifier>();
         
         
-        public INode Select(IAIContext context)
+        public INode Select(IBTContext context)
         {
             IQualifier result = null;
 

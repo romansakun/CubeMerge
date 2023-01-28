@@ -2,7 +2,7 @@
 
 namespace BTreeUtility.Nodes
 {
-    public abstract class ActionWithOptions<T, O> : IAction where T: class, IAIContext
+    public abstract class ActionWithOptions<T, O> : IAction where T: class, IBTContext
     {
         protected readonly List<IOptionScorer<T, O>> _scorers;
         
@@ -14,7 +14,7 @@ namespace BTreeUtility.Nodes
             _scorers = scorers;
         }
 
-        public void Execute(IAIContext context)
+        public void Execute(IBTContext context)
         {
             Execute(context as T);
         }

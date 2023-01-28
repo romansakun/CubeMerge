@@ -1,6 +1,6 @@
 ﻿namespace BTreeUtility.Nodes
 {
-    public abstract class QualifierBase<T> :IQualifier where T: class, IAIContext
+    public abstract class QualifierBase<T> :IQualifier where T: class, IBTContext
     {
         public INode Next { get; set; }
 
@@ -14,7 +14,7 @@
             Next = nextNode;
         }
 
-        public float Score(IAIContext context)
+        public float Score(IBTContext context)
         {
             return Score(context as T);
         }

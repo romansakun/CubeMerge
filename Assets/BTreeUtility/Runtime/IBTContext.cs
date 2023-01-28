@@ -1,6 +1,6 @@
 ﻿namespace BTreeUtility
 {
-    public interface IAIContext
+    public interface IBTContext
     {
         /// <summary>
         /// Use instead Time.DeltaTime if execution is not every frame

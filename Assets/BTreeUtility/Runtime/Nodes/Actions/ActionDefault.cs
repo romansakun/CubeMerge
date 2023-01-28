@@ -6,7 +6,7 @@ namespace BTreeUtility.Nodes
     {
         public INode Next { get; set; }
 
-        public void Execute(IAIContext context)
+        public void Execute(IBTContext context)
         {
             Debug.Log("DefaultAction.Execute()");
         }

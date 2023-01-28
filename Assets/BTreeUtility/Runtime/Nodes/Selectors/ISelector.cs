@@ -6,6 +6,6 @@ namespace BTreeUtility.Nodes
     {
         List<IQualifier> Qualifiers { get; }
         
-        INode Select(IAIContext context);
+        INode Select(IBTContext context);
     }
 }

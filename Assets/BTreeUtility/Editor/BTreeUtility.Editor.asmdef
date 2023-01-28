@@ -1,8 +1,12 @@
 {
-    "name": "BTreeUtility.Runtime",
+    "name": "BTreeUtility.Editor",
     "rootNamespace": "",
-    "references": [],
-    "includePlatforms": [],
+    "references": [
+        "GUID:f070bdee5c938914ca78ae27d4264c59"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,

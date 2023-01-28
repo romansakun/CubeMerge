@@ -8,7 +8,7 @@ namespace BTreeUtility.Nodes
         public INode Next { get; set; } = new DefaultNode();
         public List<IQualifier> Qualifiers { get; } = new List<IQualifier>();
 
-        public INode Select(IAIContext context)
+        public INode Select(IBTContext context)
         {
             for (var i = 0; i < Qualifiers.Count; i++)
             {

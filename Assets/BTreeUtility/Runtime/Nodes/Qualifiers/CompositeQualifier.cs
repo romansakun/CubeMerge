@@ -2,7 +2,7 @@
 
 namespace BTreeUtility.Nodes
 {
-    public class CompositeQualifierBase<T> : IQualifier where T: class, IAIContext
+    public class CompositeQualifierBase<T> : IQualifier where T: class, IBTContext
     {
         protected enum Operator { Or, And }
         
@@ -21,7 +21,7 @@ namespace BTreeUtility.Nodes
             Next = new DefaultNode();
         }
     
-        public float Score(IAIContext context)
+        public float Score(IBTContext context)
         {
             var result = 0f;
             for (var i = 0; i < _qualifiers.Length; i++)
