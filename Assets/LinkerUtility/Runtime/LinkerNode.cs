@@ -4,9 +4,9 @@ namespace LinkerUtility.Runtime
 {
     public class LinkerNode : ILinkerNode
     {
-        private readonly Stack<ILinkerNode> _buffStack = new Stack<ILinkerNode>();
         private readonly List<ILinkerNode> _nodes = new List<ILinkerNode>();
         private readonly Stack<ILinkerNode> _stack = new Stack<ILinkerNode>();
+        private readonly Stack<ILinkerNode> _buffStack = new Stack<ILinkerNode>();
 
         public void AddNode(ILinkerNode node)
         {
