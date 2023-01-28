@@ -4,12 +4,13 @@ namespace LinkerUtility.Runtime
 {
     public class LinkerNode : ILinkerNode
     {
+        private readonly Stack<ILinkerNode> _buffStack = new Stack<ILinkerNode>();
         private readonly List<ILinkerNode> _nodes = new List<ILinkerNode>();
         private readonly Stack<ILinkerNode> _stack = new Stack<ILinkerNode>();
-        
+
         public void AddNode(ILinkerNode node)
         {
-            _nodes.Add(node);
+            _nodes.Add(node); 
             _stack.Clear();
             for (int i = _nodes.Count - 1; i >= 0 ; i--)
                 _stack.Push(_nodes[i]);
@@ -30,12 +31,12 @@ namespace LinkerUtility.Runtime
 
             var node = _stack.Pop();
             
-            var bufStack = new Stack<ILinkerNode>();
-            while (node.HasNext())
-                bufStack.Push(node.Next());
+            _buffStack.Clear();
+            if (node.HasNext())
+                _buffStack.Push(node.Next());
 
-            while (bufStack.Count > 0)
-                _stack.Push(bufStack.Pop());
+            while (_buffStack.Count > 0)
+                _stack.Push(_buffStack.Pop());
             
             return node;
         }
