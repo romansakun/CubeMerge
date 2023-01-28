@@ -1,15 +1,15 @@
 {
-    "name": "BTreeUtility.Editor.Tests",
+    "name": "BTreeUtility.Runtime.Tests",
     "rootNamespace": "",
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
-        "BTreeUtility.Runtime",
-        "BTreeUtility.Runtime.Tests",
-        "BTreeUtility.Editor"
+        "BTreeUtility.Runtime"
     ],
     "includePlatforms": [
-        "Editor"
+        "Editor",
+        "macOSStandalone",
+        "WindowsStandalone64"
     ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using BTreeUtility.Nodes;
 
 namespace BTreeUtility.Nodes
 {
@@ -16,7 +15,7 @@ namespace BTreeUtility.Nodes
                 if (qualifier.Score(context) > 0)
                     return qualifier;
             }
-            return null;
+            return Next;
         }
     }
 }

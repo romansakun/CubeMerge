@@ -1,33 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
-using BTreeUtility.Nodes;
 
-namespace BTreeUtility
+namespace BTreeUtility.Nodes
 {
-    public abstract class NodesFactoryBase
+    public abstract class NodeFactoryBase
     {
-        private MapBase _map;
+        private INodeMap _nodeMap;
         
-        public NodesFactoryBase(MapBase map)
+        public NodeFactoryBase(INodeMap nodeMap)
         {
-            _map = map;
+            _nodeMap = nodeMap;
         }
         
         public Dictionary<int, INode> CreateNodes()
         {
-            var nodesCount = _map.Nodes.Count;
+            if (_nodeMap.Nodes == null || _nodeMap.Nodes.Count == 0)
+                throw new Exception($"Nodes missing!\nCheck your Map:\n{_nodeMap.GetType().FullName}");
+            
+            var nodesCount = _nodeMap.Nodes.Count;
             var nodes = new Dictionary<int, INode>(nodesCount);
 
             var isFirstNode = true;
             ISelector currentSelector = null;
-            foreach (var nodeId in _map.Nodes)
+            foreach (var nodeId in _nodeMap.Nodes)
             {
                 var node = CreateNode(nodeId);
 
                 if (isFirstNode)
                 {
                     if (node is not ISelector rootSelector)
-                        throw new Exception($"First node must be the Selector!\nCheck your Map:\n{_map.GetType().FullName}");
+                        throw new Exception($"First node must be the Selector!\nCheck your Map:\n{_nodeMap.GetType().FullName}");
                     
                     currentSelector = rootSelector;
                     nodes.Add(nodeId, rootSelector);
@@ -38,7 +40,7 @@ namespace BTreeUtility
                 {
                     case ISelector selector:
                         if (currentSelector.Qualifiers.Count == 0)
-                            throw new Exception($"Selector must have at least one qualifier under itself!\nCheck your Map:\n{_map.GetType().FullName}");
+                            throw new Exception($"Selector must have at least one qualifier under itself!\nCheck your Map:\n{_nodeMap.GetType().FullName}");
 
                         currentSelector = selector;
                         nodes.Add(nodeId, currentSelector);
@@ -46,7 +48,7 @@ namespace BTreeUtility
                     
                     case IQualifier qualifier:
                         if (currentSelector == null)
-                            throw new Exception($"Qualifiers must be under selectors!\nCheck order nodes in your Map:\n{_map.GetType().FullName}");
+                            throw new Exception($"Qualifiers must be under selectors!\nCheck order nodes in your Map:\n{_nodeMap.GetType().FullName}");
                         
                         currentSelector.Qualifiers.Add(qualifier);
                         nodes.Add(nodeId, qualifier);
@@ -65,9 +67,17 @@ namespace BTreeUtility
         
         private void ConnectNodes(Dictionary<int, INode> allNodes)
         {
-            var connections = _map.Connections;
+            //todo check Circular connections
+            
+            var connections = _nodeMap.Connections;
+            if (connections == null || connections.Count == 0)
+                throw new Exception($"Connections missing!\nCheck your Map:\n{_nodeMap.GetType().FullName}");
+            
             foreach (var connection in connections)
             {
+                if (connection.Key == connection.Value)
+                    throw new Exception($"Circular connection!\nCheck your Map:\n{_nodeMap.GetType().FullName}");
+                
                 if (!allNodes.ContainsKey(connection.Value))
                     throw new Exception($"Nodes in your map dont contains : [{connection.Value}]!");
                 
@@ -75,6 +85,6 @@ namespace BTreeUtility
             }
         }
 
-        public abstract INode CreateNode(int nodeId);
+        protected abstract INode CreateNode(int nodeId);
     }
 }

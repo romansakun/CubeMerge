@@ -1,4 +1,4 @@
-﻿namespace BTreeUtility
+﻿namespace BTreeUtility.Nodes
 {
     public interface INode
     {

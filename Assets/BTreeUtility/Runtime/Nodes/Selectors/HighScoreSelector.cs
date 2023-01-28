@@ -11,7 +11,7 @@ namespace BTreeUtility.Nodes
         
         public INode Select(IBTContext context)
         {
-            IQualifier result = null;
+            INode result = Next;
 
             var maxScore = 0f;
             for (int i = 0; i < Qualifiers.Count; i++)

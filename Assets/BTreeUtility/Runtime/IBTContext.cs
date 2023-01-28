@@ -3,7 +3,7 @@
     public interface IBTContext
     {
         /// <summary>
-        /// Use instead Time.DeltaTime if execution is not every frame
+        /// It is time between BTClient executions
         /// </summary>
         float DeltaTime { get; set; }
     }
