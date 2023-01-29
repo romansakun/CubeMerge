@@ -1,3 +1,17 @@
 {
-	"name": "CubeMerge.Runtime"
+    "name": "CubeMerge.Runtime",
+    "rootNamespace": "",
+    "references": [
+        "GUID:14efb3c8f7415604bbae3570597785aa",
+        "GUID:f070bdee5c938914ca78ae27d4264c59"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }

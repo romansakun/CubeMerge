@@ -214,7 +214,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57321489f80c55448bcb348ba7dfcb77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _tilePositionOffset: {x: -4, y: -4}
+  _tilePositionOffset: {x: -3.5, y: -3.75}
   _darkSquare: {fileID: 1643983397}
   _lightSquare: {fileID: 2923298617686410047}
 --- !u!33 &5403964318812783962

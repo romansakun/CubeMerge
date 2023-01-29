@@ -5,7 +5,7 @@ using MVVM.Runtime.ReactiveProperties;
 
 namespace MVVM.Runtime
 {
-    public abstract class View<T> : MonoBehaviour, IView<T> where T: IViewModel
+    public abstract class  View<T> : MonoBehaviour, IView<T> where T: IViewModel
     {
         private List<Action> _listenerRemovingActions = new List<Action>(10);
         
