@@ -9,22 +9,22 @@ namespace CubeMerge.Runtime.Scripts.Battle
         private readonly float _step;
         private readonly Position[] _walkingAround = new Position[]
         {
+            new Position(-0.7071f, 0.7071f),
+            new Position(0.7071f, -0.7071f),
+            new Position(-0.7071f, -0.7071f),
+            new Position(0.7071f, 0.7071f),
+            new Position(-0.9239f, 0.3827f),
+            new Position(0.9239f, -0.3827f),
+            new Position(-0.9239f, -0.3827f),
+            new Position(0.9239f, 0.3827f),
+            new Position(-0.3827f, 0.9239f),
+            new Position(0.3827f, -0.9239f),
+            new Position(-0.3827f, -0.9239f),
+            new Position(0.3827f, 0.9239f),
             new Position(-1, 0),
-            new Position(-1, .5f),
-            new Position(-1, -.5f),
             new Position(1, 0),
-            new Position(1, .5f),
-            new Position(1, -.5f),
             new Position(0, -1),
-            new Position(.5f, -1),
-            new Position(-.5f, -1),
-            new Position(0, 1),
-            new Position(.5f, 1),
-            new Position(-.5f, 1),
-            new Position(1, -1),
-            new Position(-1, 1),
-            new Position(-1, -1),
-            new Position(1, 1),
+            new Position(0, 1)
         };
 
         public AStar(MapArea map, float step)
