@@ -55,7 +55,7 @@ namespace CubeMerge.Runtime.Scripts.Battle
                 foreach (var offset in _walkingAround)
                 {
                     var position = currentNode.Position + (offset * _step);
-                    if (Position.SqrtDistance(position, target) < _step)
+                    if (Position.SqrtDistance(position, target) < _step * _step)
                     {
                         done = true;
                         result.Push(position);

@@ -1,8 +1,8 @@
-using UnityEngine;
+using System.Collections.Generic;
 
 namespace CubeMerge.Runtime.Scripts.Battle
 {
-    public struct Position
+    public struct Position : IEqualityComparer<Position>
     {
         public float X;
         public float Y;
@@ -25,16 +25,16 @@ namespace CubeMerge.Runtime.Scripts.Battle
             return !(lhs == rhs);
         }
 
-        public override bool Equals(object obj) => obj is Position position && this == position;
+        public bool Equals(Position position) => this == position;
+        public bool Equals(Position a, Position b) => a.Equals(b);
+        public override bool Equals(object obj) => obj is Position position && this.Equals(position);
 
-        public override int GetHashCode() => this.X.GetHashCode() ^ this.Y.GetHashCode() << 2;
+        public int GetHashCode(Position position) => position.GetHashCode();
+        public override int GetHashCode() => X.GetHashCode() ^ Y.GetHashCode() << 2;
 
         public static Position operator +(Position a, Position b) => new Position(a.X + b.X, a.Y + b.Y);
-
         public static Position operator -(Position a, Position b) => new Position(a.X - b.X, a.Y - b.Y);
-
         public static Position operator *(Position a, float b) => new Position(a.X * b, a.Y * b);
-
         public static Position operator /(Position a, float b) => new Position(a.X / b, a.Y / b);
 
         public static float SqrtDistance(Position a, Position b)

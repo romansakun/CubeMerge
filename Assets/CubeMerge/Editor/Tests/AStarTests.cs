@@ -10,7 +10,6 @@ public class AStarTests
         public MapArea Map;
         public Position Start;
         public Position Target;
-        public Position FirstStepExpected;
     }
 
     private readonly TestCase[] _testCases = new[]
@@ -19,22 +18,19 @@ public class AStarTests
         {
             Map = new MapArea() {Bounds = new AreaBounds(8, 10)},
             Start = new Position(-2, -2),
-            Target = new Position(4, 5),
-            FirstStepExpected = new Position(-1, -1)
+            Target = new Position(4, 5)
         },
         new TestCase()
         {
             Map = new MapArea() {Bounds = new AreaBounds(10, 10)},
             Start = new Position(-5, 0),
-            Target = new Position(5, 5),
-            FirstStepExpected = new Position(-4, 1)
+            Target = new Position(5, 5)
         },
         new TestCase()
         {
             Map = new MapArea() {Bounds = new AreaBounds(5, 5)},
             Start = new Position(1, 2),
-            Target = new Position(-2, -2),
-            FirstStepExpected = new Position(0, 1)
+            Target = new Position(-2, -2)
         },
         new TestCase()
         {
@@ -44,27 +40,28 @@ public class AStarTests
                     new AreaBounds(new Position(-1,1),3, 1)
                 }},
             Start = new Position(-1, -2),
-            Target = new Position(1, 3),
-            FirstStepExpected = new Position(0, -1)
+            Target = new Position(1, 3)
         }
     };
 
     [Test]
-    [TestCase(0)]
-    [TestCase(1)]
-    [TestCase(2)]
-    [TestCase(3)]
-    public void WhenGetPath_ThenExpectedFirsStep(int testCaseId)
+    [TestCase(0, 1)]
+    [TestCase(1, .5f)]
+    [TestCase(2, .75f)]
+    [TestCase(3, .25f)]
+    public void WhenGetPath_ThenExpectedFirsStep(int testCaseId, float step)
     {
         var testCase = _testCases[testCaseId];
-        var aStar = new AStar(testCase.Map, 1);
+        var aStar = new AStar(testCase.Map, step);
 
         var path = aStar.GetPath(testCase.Start, testCase.Target);
 
-        Assert.AreEqual(testCase.FirstStepExpected, path.Pop());
-        
+        var pos = new Position();
         while (path.Count > 0)
-            Debug.Log(path.Pop().ToString());
-
+        {
+            pos = path.Pop();
+            Debug.Log(pos.ToString());
+        }
+        Assert.IsTrue(Position.SqrtDistance(testCase.Target, pos) < step * step);
     }
 }
