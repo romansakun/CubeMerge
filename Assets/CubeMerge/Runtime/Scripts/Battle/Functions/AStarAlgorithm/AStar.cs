@@ -7,6 +7,8 @@ namespace CubeMerge.Runtime.Scripts.Battle
     {
         private readonly MapArea _map;
         private readonly float _step;
+        private readonly List<PositionNode> _nodes = new List<PositionNode>();
+        private readonly Stack<PositionNode> _nodeStack = new Stack<PositionNode>();
         private readonly Position[] _walkingAround = new Position[]
         {
             new Position(-0.7071f, 0.7071f),
@@ -42,20 +44,20 @@ namespace CubeMerge.Runtime.Scripts.Battle
             if (start == target)
                 return result;
 
-            var nodes = new List<PositionNode>();
-            var nodeStack = new Stack<PositionNode>();
-            nodeStack.Push(new PositionNode(){Position = start});
+            _nodes.Clear();
+            _nodeStack.Clear();
+            _nodeStack.Push(new PositionNode(){Position = start});
             
             var done = false;
             while (!done)
             {
-                var currentNode = nodeStack.Pop();
+                var currentNode = _nodeStack.Pop();
                 
                 var filterStack = new Stack<PositionNode>();    
                 foreach (var offset in _walkingAround)
                 {
                     var position = currentNode.Position + (offset * _step);
-                    if (Position.SqrtDistance(position, target) < _step * _step)
+                    if (Position.SqrDistance(position, target) < _step * _step)
                     {
                         done = true;
                         result.Push(position);
@@ -67,7 +69,7 @@ namespace CubeMerge.Runtime.Scripts.Battle
                         break;
                     }
 
-                    if (!_map.IsFreePosition(position) || nodes.Find(n => n.Position == position) != null) 
+                    if (!_map.IsFreePosition(position)) // || _nodes.Find(n => Position.SqrDistance(n.Position, position) < _step * _step) != null) 
                         continue;
 
                     var positionNode = new PositionNode
@@ -83,14 +85,14 @@ namespace CubeMerge.Runtime.Scripts.Battle
                     else
                     {
                         var best = filterStack.Peek();
-                        if (Position.SqrtDistance(best.Position, target) > Position.SqrtDistance(position, target))
+                        if (Position.CompareDistances(best.Position, target, position, target) == 1)
                             filterStack.Push(positionNode);
                     }
                 }
                 
-                nodes.Add(currentNode);
+                _nodes.Add(currentNode);
                 if (filterStack.Count > 0)
-                    nodeStack.Push(filterStack.Pop());
+                    _nodeStack.Push(filterStack.Pop());
             }
 
             return result;
