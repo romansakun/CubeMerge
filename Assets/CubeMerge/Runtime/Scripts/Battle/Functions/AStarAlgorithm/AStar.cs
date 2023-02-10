@@ -5,10 +5,12 @@ namespace CubeMerge.Runtime.Scripts.Battle
 {
     public class AStar
     {
-        private readonly MapArea _map;
         private readonly float _step;
-        private readonly List<PositionNode> _nodes = new List<PositionNode>();
+        private readonly MapArea _map;
+        private readonly Stack<PositionNode> _nodePool = new Stack<PositionNode>();
         private readonly Stack<PositionNode> _nodeStack = new Stack<PositionNode>();
+        private readonly Stack<PositionNode> _filterStack = new Stack<PositionNode>();
+        private readonly Stack<Position> _resultPath = new Stack<Position>();
         private readonly Position[] _walkingAround = new Position[]
         {
             new Position(-0.7071f, 0.7071f),
@@ -39,31 +41,32 @@ namespace CubeMerge.Runtime.Scripts.Battle
         {
             if (!_map.Bounds.IsInBounds(target) || !_map.Bounds.IsInBounds(start))
                 throw new Exception("Start or target is not in map bounds!");
-
-            var result = new Stack<Position>();
-            if (start == target)
-                return result;
-
-            _nodes.Clear();
-            _nodeStack.Clear();
-            _nodeStack.Push(new PositionNode(){Position = start});
             
+            _resultPath.Clear();
+            _nodeStack.Clear();
+
+            if (start == target)
+                return _resultPath;
+            
+            _nodeStack.Push(GetNodeFromPool(start, null));
+
             var done = false;
             while (!done)
             {
                 var currentNode = _nodeStack.Pop();
                 
-                var filterStack = new Stack<PositionNode>();    
+                _filterStack.Clear();    
                 foreach (var offset in _walkingAround)
                 {
                     var position = currentNode.Position + (offset * _step);
                     if (Position.SqrDistance(position, target) < _step * _step)
                     {
                         done = true;
-                        result.Push(position);
+                        _resultPath.Push(position);
                         while(currentNode.Next != null)
                         {
-                            result.Push(currentNode.Position);
+                            _nodePool.Push(currentNode.Next);
+                            _resultPath.Push(currentNode.Position);
                             currentNode = currentNode.Next;
                         }
                         break;
@@ -72,30 +75,36 @@ namespace CubeMerge.Runtime.Scripts.Battle
                     if (!_map.IsFreePosition(position)) // || _nodes.Find(n => Position.SqrDistance(n.Position, position) < _step * _step) != null) 
                         continue;
 
-                    var positionNode = new PositionNode
+                    var positionNode = GetNodeFromPool(position, currentNode);
+                    if (_filterStack.Count == 0)
                     {
-                        Position = position,
-                        Next = currentNode
-                    };
-                    
-                    if (filterStack.Count == 0)
-                    {
-                        filterStack.Push(positionNode);
+                        _filterStack.Push(positionNode);
                     }
                     else
                     {
-                        var best = filterStack.Peek();
+                        var best = _filterStack.Peek();
                         if (Position.CompareDistances(best.Position, target, position, target) == 1)
-                            filterStack.Push(positionNode);
+                            _filterStack.Push(positionNode);
+                        else
+                            _nodePool.Push(positionNode);
                     }
                 }
-                
-                _nodes.Add(currentNode);
-                if (filterStack.Count > 0)
-                    _nodeStack.Push(filterStack.Pop());
+                if (_filterStack.Count > 0)
+                {
+                    _nodeStack.Push(_filterStack.Pop());
+                    while (_filterStack.Count > 0)
+                        _nodePool.Push(_filterStack.Pop());
+                }
             }
 
-            return result;
+            return _resultPath;
+        }
+
+        private PositionNode GetNodeFromPool(Position position, PositionNode node)
+        {
+            return _nodePool.Count > 0 
+                ? _nodePool.Pop().Init(position, node) 
+                : new PositionNode().Init(position, node);
         }
     }
 
@@ -103,5 +112,12 @@ namespace CubeMerge.Runtime.Scripts.Battle
     {
         public Position Position;
         public PositionNode Next;
+
+        public PositionNode Init(Position p, PositionNode next)
+        {
+            Position = p;
+            Next = next;
+            return this;
+        }
     }
 }

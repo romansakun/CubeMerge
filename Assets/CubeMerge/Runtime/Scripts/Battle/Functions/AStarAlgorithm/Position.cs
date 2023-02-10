@@ -62,11 +62,13 @@ namespace CubeMerge.Runtime.Scripts.Battle
             var ab22 = a2.Y - b2.Y;
             var ab2SqrDist = ab21 * ab21 + ab22 * ab22;
             
-            return Math.Abs(ab1SqrDist - ab2SqrDist) > eps 
-                ? ab1SqrDist > ab2SqrDist 
-                    ? 1
-                    : -1 
-                : 0;
+            return ab1SqrDist >= ab2SqrDist 
+                    ? ab1SqrDist - ab2SqrDist < eps 
+                        ? 0 
+                        : 1
+                    : ab2SqrDist - ab1SqrDist < eps 
+                        ? 0 
+                        : -1;
         }
         
         

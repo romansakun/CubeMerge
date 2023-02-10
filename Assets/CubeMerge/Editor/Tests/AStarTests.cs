@@ -62,6 +62,7 @@ public class AStarTests
             pos = path.Pop();
             Debug.Log(pos.ToString());
         }
+        Debug.Log($"distance to target: {Position.Distance(pos, testCase.Target)}");
         Assert.IsTrue(Position.SqrDistance(testCase.Target, pos) < step * step);
     }
 }

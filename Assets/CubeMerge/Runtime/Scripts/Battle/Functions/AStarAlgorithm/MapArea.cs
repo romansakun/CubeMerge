@@ -24,12 +24,9 @@ namespace CubeMerge.Runtime.Scripts.Battle
             if (!Bounds.IsInBounds(position))
                 return false;
 
-            if (Obstacles == null || Obstacles.Count == 0)
-                return true;
-            
-            foreach (var obstacle in Obstacles)
+            for (var i = 0; i < Obstacles.Count; i++)
             {
-                if (obstacle.IsInBounds(position))
+                if (Obstacles[i].IsInBounds(position))
                     return false;
             }
             return true;
