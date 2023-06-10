@@ -87,7 +87,7 @@ public class ReactivePropertyTests
         void TestListenerAction() => listenerInvokeCount++;
         propertyInterface.AddListener(TestListenerAction);
         
-        reactiveProperty.DoAction(dict => dict[0] = 5);
+        reactiveProperty.Change(dict => dict[0] = 5);
         
         Assert.AreEqual(1, listenerInvokeCount);
     }

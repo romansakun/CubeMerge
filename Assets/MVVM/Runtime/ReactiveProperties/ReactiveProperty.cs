@@ -44,9 +44,9 @@ namespace MVVM.Runtime.ReactiveProperties
             _value = fromOther._value;
         }
 
-        public void DoAction(Action<T> action)
+        public void Change(Action<T> changingAction)
         {
-            action(_value);
+            changingAction(_value);
             OnChange();
         }
         
