@@ -1,5 +1,5 @@
 {
-    "name": "Utilities.Editor",
+    "name": "Core.Editor",
     "rootNamespace": "",
     "references": [
         "GUID:f1448b9eeae1bd64386013fddf1a7333"

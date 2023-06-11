@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
-using Utilities.Runtime;
+using Core.Runtime;
 
 
 public class PoolTests

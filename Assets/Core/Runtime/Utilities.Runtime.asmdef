@@ -1,5 +1,5 @@
 {
-    "name": "Utilities.Runtime",
+    "name": "Core.Runtime",
     "rootNamespace": "",
     "references": [],
     "includePlatforms": [],

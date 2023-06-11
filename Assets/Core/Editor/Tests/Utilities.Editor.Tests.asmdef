@@ -1,11 +1,11 @@
 {
-    "name": "Utilities.Editor.Tests",
+    "name": "Core.Editor.Tests",
     "rootNamespace": "",
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
-        "Utilities.Runtime",
-        "Utilities.Editor"
+        "Core.Runtime",
+        "Core.Editor"
     ],
     "includePlatforms": [
         "Editor"

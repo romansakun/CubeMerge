@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Utilities.Runtime
+namespace Core.Runtime
 {
     public class Pool<T> : IDisposable where T: IPoolObject
     {

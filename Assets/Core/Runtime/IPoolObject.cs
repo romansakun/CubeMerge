@@ -1,4 +1,4 @@
-namespace Utilities.Runtime
+namespace Core.Runtime
 {
     public interface IPoolObject
     {
