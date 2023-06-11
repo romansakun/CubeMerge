@@ -1,7 +1,7 @@
 using NUnit.Framework;
 using Core.Runtime;
 
-public class ServiceLocatorTests
+public class BinderTests
 {
     private class TestService : IService
     {
@@ -14,15 +14,15 @@ public class ServiceLocatorTests
     [TearDown]
     public void TearDown()
     {
-        ServiceLocator.RemoveAll();
+        Binder.RemoveAll();
     }
     
     [Test]
     public void WhenBind_AndResolve()
     {
         var testService = new TestService();
-        ServiceLocator.Bind<TestService>(testService);
-        var testServiceResolved = ServiceLocator.Resolve<TestService>();
+        Binder.Bind<TestService>(testService);
+        var testServiceResolved = Binder.Resolve<TestService>();
         Assert.IsTrue(testService == testServiceResolved);
     }
 
@@ -30,9 +30,9 @@ public class ServiceLocatorTests
     public void WhenBind_AndAlreadyBind_ThenException()
     {
         var testService = new TestService();
-        ServiceLocator.Bind<TestService>(testService);
+        Binder.Bind<TestService>(testService);
         
-        var e = Assert.Catch(() => ServiceLocator.Bind<TestService>(testService));
+        var e = Assert.Catch(() => Binder.Bind<TestService>(testService));
         
         Assert.IsTrue(e.Message.Contains("This service was already bind!"));
     }
@@ -41,16 +41,17 @@ public class ServiceLocatorTests
     public void WhenRemove_AndResolve() 
     {
         var testService = new TestService();
-        ServiceLocator.Bind<TestService>(testService);
+        Binder.Bind<TestService>(testService);
 
-        Assert.IsTrue(ServiceLocator.Remove<TestService>());
+        Assert.IsTrue(Binder.Remove<TestService>());
+        var e = Assert.Catch(() => Binder.Resolve<TestService>());
         
-        Assert.IsTrue(ServiceLocator.Resolve<TestService>() == null);
+        Assert.IsTrue(e.Message.Contains("There is no service"));
     }
     
     [Test]
     public void WhenRemove_ThenFalse()
     {
-        Assert.IsFalse(ServiceLocator.Remove<TestService>());
+        Assert.IsFalse(Binder.Remove<TestService>());
     }
 }

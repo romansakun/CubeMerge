@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Core.Runtime
 {
-    public static class ServiceLocator
+    public static class Binder
     {
         private static readonly Dictionary<Type, IService> _services = new Dictionary<Type, IService>();
 
@@ -16,22 +16,27 @@ namespace Core.Runtime
             _services.Add(typeof(T), service);
         }
 
+        public static bool IsBound<T>()
+        {
+            return _services.ContainsKey(typeof(T));
+        }
+
         public static T Resolve<T>() where T : class, IService
         {
             var serviceType = typeof(T);
             return _services.ContainsKey(serviceType) 
                 ? _services[serviceType] as T
-                : null;
+                : throw new Exception($"There is no service: {serviceType.FullName}");
         }
 
         public static bool Remove<T>() where T : class, IService
         {
-            var service = Resolve<T>();
-            if (service == null) 
+            var serviceType = typeof(T);
+            if (!_services.ContainsKey(serviceType))
                 return false;
 
-            _services.Remove(typeof(T));
-            service.Dispose();
+            _services[serviceType].Dispose();
+            _services.Remove(serviceType);
             return true;
         }
 
