@@ -4,7 +4,7 @@ namespace BTreeUtility.Nodes
 {
     public class FirstScoreSelector : ISelector
     {
-        public INode Next { get; set; } = new DefaultNode();
+        public INode Next { get; set; }
         public List<IQualifier> Qualifiers { get; } = new List<IQualifier>();
 
         public INode Select(IBTContext context)

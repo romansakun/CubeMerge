@@ -6,16 +6,14 @@ namespace BTreeUtility
 {
     public class BTClient
     {
-        private readonly ISelector _rootSelector;
+        private readonly List<INode> _nodeChain = new List<INode>();
         private readonly IBTContext _context;
-        private readonly List<INode> _nodeChain;
+        private readonly ISelector _rootSelector;
 
         public BTClient(ISelector rootSelector, IBTContext context)
         {
             _rootSelector = rootSelector ?? throw new ArgumentException($"{nameof(rootSelector)} is null!");
             _context = context ?? throw new ArgumentException($"{nameof(context)} is null!");
-            
-            _nodeChain = new List<INode>(15);
         }
 
         public void Execute()
@@ -33,13 +31,15 @@ namespace BTreeUtility
                     case ISelector selector:
                         currentNode = selector.Select(_context);
                         break;
+                    case IQualifier qualifier:
+                        currentNode = qualifier.Next;
+                        break;
                     case IAction action:
                         action.Execute(_context);
                         currentNode = action.Next;
                         break;
                     default:
-                        currentNode = currentNode.Next;
-                        break;
+                        throw new Exception("Only selector or action can be next node!");
                 }
             }
             

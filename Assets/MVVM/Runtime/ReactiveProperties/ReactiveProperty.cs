@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace MVVM.Runtime.ReactiveProperties
 {
-    public sealed class ReactiveProperty<T> : IReactiveProperty<T>, IDisposable
+    public class ReactiveProperty<T> : IReactiveProperty<T>, IDisposable
     {
         private static readonly IEqualityComparer<T> EqualityComparer = EqualityComparer<T>.Default;
         
@@ -103,5 +103,9 @@ namespace MVVM.Runtime.ReactiveProperties
             _addOnceListeners = null;
             _value = default;
         }
+    }
+
+    public class EmptyProperty : ReactiveProperty<bool>
+    {
     }
 }

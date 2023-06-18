@@ -6,11 +6,11 @@ namespace Sample
 {
     public class SampleClientComponent : BtClientComponent
     {
-        public static void CreateSampleClient(ISelector rootSelector, IBTContext context)
+        public void CreateSampleClient(ISelector rootSelector, IBTContext context)
         {
             var go = new GameObject($"{nameof(SampleClientComponent)}");
             var client = go.AddComponent<SampleClientComponent>();
-            client.Init(rootSelector, context);
+            client.Init(new BTClient(rootSelector, context));
         }
     }
 }

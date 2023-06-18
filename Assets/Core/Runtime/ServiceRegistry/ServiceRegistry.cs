@@ -3,11 +3,16 @@ using System.Collections.Generic;
 
 namespace Core.Runtime
 {
-    public static class Binder
+    public static class ServiceRegistry
     {
         private static readonly Dictionary<Type, IService> _services = new Dictionary<Type, IService>();
 
-        public static void Bind<T>(T service) where T : class, IService
+        public static bool Contains<T>()
+        {
+            return _services.ContainsKey(typeof(T));
+        }
+
+        public static void Add<T>(T service) where T : class, IService
         {
             var serviceType = typeof(T);
             if (_services.ContainsKey(serviceType))
@@ -16,12 +21,7 @@ namespace Core.Runtime
             _services.Add(typeof(T), service);
         }
 
-        public static bool IsBound<T>()
-        {
-            return _services.ContainsKey(typeof(T));
-        }
-
-        public static T Resolve<T>() where T : class, IService
+        public static T Get<T>() where T : class, IService
         {
             var serviceType = typeof(T);
             return _services.ContainsKey(serviceType) 

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Core.Runtime.PathFinder;
 using MVVM.Runtime.ReactiveProperties;
 using UnityEngine;
 
@@ -6,39 +7,40 @@ namespace CubeMerge.Runtime.Scripts.Battle
 {
     public class BattleAreaViewModel : IViewModel
     {
-        private ReactiveProperty<MapArea> _battleArea;
-        public IReactiveProperty<MapArea> BattleArea => _battleArea;
+        public EmptyProperty StartPathFinding;
 
-        private AStar _aStar;
-        
+        private int[,] _battleArea = new int[10, 10];
         
         public BattleAreaViewModel()
         {
-            var bounds = new AreaBounds(new Position(0, 0), 8, 10);
-            var map = new MapArea(bounds);
-            _aStar = new AStar(map, .1f);
-            
-            _battleArea = new ReactiveProperty<MapArea>(map);
+            StartPathFinding = new EmptyProperty();
         }
-
+        
         public List<Vector3> GetPath(Vector3 start, Vector3 target)
         {
-            var startPos = new Position(start.x, start.z);
-            var targetPos = new Position(target.x, target.z);
-            var path = _aStar.GetPath(startPos, targetPos);
-
-            var result = new List<Vector3>(path.Count);
-            while (path.Count > 0)
+            var pathFinder = new PathFinder();
+            var path = pathFinder.GetPath(_battleArea, new Point(start.z, start.x), new Point(target.z, target.x));
+            var result = new List<Vector3>();
+            foreach (var pos in path)
             {
-                var pos = path.Pop();
-                result.Add(new Vector3(pos.X, 0 , pos.Y));
+                result.Add(new Vector3(pos.Y, 0 , pos.X));
             }
             return result;
         }
-        
+
         public void Dispose()
         {
-            _battleArea.Dispose();    
+            StartPathFinding.Dispose();
+        }
+
+        public void AddObstacles(Transform[] obstacles)
+        {
+            _battleArea = new int[10, 10];
+            
+            foreach (var obstacle in obstacles)
+            {
+                _battleArea[(int)obstacle.position.z, (int)obstacle.position.x] = 1;
+            }
         }
     }
 }

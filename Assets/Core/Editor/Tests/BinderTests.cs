@@ -14,15 +14,15 @@ public class BinderTests
     [TearDown]
     public void TearDown()
     {
-        Binder.RemoveAll();
+        ServiceRegistry.RemoveAll();
     }
     
     [Test]
     public void WhenBind_AndResolve()
     {
         var testService = new TestService();
-        Binder.Bind<TestService>(testService);
-        var testServiceResolved = Binder.Resolve<TestService>();
+        ServiceRegistry.Add<TestService>(testService);
+        var testServiceResolved = ServiceRegistry.Get<TestService>();
         Assert.IsTrue(testService == testServiceResolved);
     }
 
@@ -30,9 +30,9 @@ public class BinderTests
     public void WhenBind_AndAlreadyBind_ThenException()
     {
         var testService = new TestService();
-        Binder.Bind<TestService>(testService);
+        ServiceRegistry.Add<TestService>(testService);
         
-        var e = Assert.Catch(() => Binder.Bind<TestService>(testService));
+        var e = Assert.Catch(() => ServiceRegistry.Add<TestService>(testService));
         
         Assert.IsTrue(e.Message.Contains("This service was already bind!"));
     }
@@ -41,10 +41,10 @@ public class BinderTests
     public void WhenRemove_AndResolve() 
     {
         var testService = new TestService();
-        Binder.Bind<TestService>(testService);
+        ServiceRegistry.Add<TestService>(testService);
 
-        Assert.IsTrue(Binder.Remove<TestService>());
-        var e = Assert.Catch(() => Binder.Resolve<TestService>());
+        Assert.IsTrue(ServiceRegistry.Remove<TestService>());
+        var e = Assert.Catch(() => ServiceRegistry.Get<TestService>());
         
         Assert.IsTrue(e.Message.Contains("There is no service"));
     }
@@ -52,6 +52,6 @@ public class BinderTests
     [Test]
     public void WhenRemove_ThenFalse()
     {
-        Assert.IsFalse(Binder.Remove<TestService>());
+        Assert.IsFalse(ServiceRegistry.Remove<TestService>());
     }
 }

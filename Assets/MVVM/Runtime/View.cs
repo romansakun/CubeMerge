@@ -46,11 +46,18 @@ namespace MVVM.Runtime
             
             _listenerRemovingActions.ForEach((removeListener) => removeListener());
             _listenerRemovingActions.Clear();
+            _viewModel.Dispose();
         }
 
         private void OnDestroy()
         {
             RemoveAllViewModelListeners();
+            OnDestroyed();
+        }
+
+        protected virtual void OnDestroyed()
+        {
+            
         }
     }
 }

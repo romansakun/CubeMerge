@@ -12,7 +12,7 @@ namespace CubeMerge.Runtime
         
         private void Awake()
         {
-            _context = new ProjectContext();
+            _context = new ProjectContext();   
             _context.SceneViews = _sceneViews;
             _main = new Main();
         }

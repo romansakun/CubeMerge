@@ -1,4 +1,3 @@
-using BTreeUtility.Nodes;
 using UnityEngine;
 
 namespace BTreeUtility
@@ -18,9 +17,9 @@ namespace BTreeUtility
             _executionTimer = 0;
         }
 
-        public void Init(ISelector rootSelector, IBTContext context)
+        public void Init(BTClient client)
         {
-            _client = new BTClient(rootSelector, context);
+            _client = client;
         }
 
         public void SetExecutionDeltaTime(float delta)
@@ -36,7 +35,6 @@ namespace BTreeUtility
             if (_executionTimer <= 0)
             {
                 _executionTimer = _executionDeltaTime;
-                
                 _context.DeltaTime = Time.realtimeSinceStartup - _executionLastCallTime;
                 _executionLastCallTime = Time.realtimeSinceStartup;
                  

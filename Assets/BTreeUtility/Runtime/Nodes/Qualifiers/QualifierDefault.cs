@@ -2,7 +2,7 @@
 {
     public class QualifierDefault : IQualifier
     {
-        public INode Next { get; set; } = new DefaultNode();
+        public INode Next { get; set; }
         
         private readonly float _score;
 
